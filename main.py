@@ -47,7 +47,8 @@ def main():
         
         with torch.no_grad():
             sample = torch.randn(64, config.LATENT_DIM).to(config.DEVICE)
-            sample = model.decoder(sample).cpu()
+            sample = model.decoder(sample)
+            sample = torch.sigmoid(sample).cpu() 
             if not os.path.exists('results'):
                 os.makedirs('results')
             save_image(sample,

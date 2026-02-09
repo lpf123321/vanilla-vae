@@ -65,7 +65,7 @@ class Decoder(nn.Module):
         )
         self.dec2 = nn.Sequential(
             nn.ConvTranspose2d(32, input_channels, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.Sigmoid()
+            # nn.Sigmoid() removed to use BCEWithLogitsLoss for numerical stability
         )
 
     def forward(self, z: Tensor) -> Tensor:

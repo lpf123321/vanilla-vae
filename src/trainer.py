@@ -4,9 +4,9 @@ from torch.nn import functional as F
 from torchvision.utils import save_image
 
 def loss_function(recon_x, x, mu, logvar, kld_weight=1.0):
-    # BCE Loss is the correct likelihood for MNIST (values in [0, 1])
+    # BCE Loss with logits is more numerically stable
     # reduction='sum' sums over the batch and pixels
-    BCE = F.binary_cross_entropy(recon_x, x, reduction='sum')
+    BCE = F.binary_cross_entropy_with_logits(recon_x, x, reduction='sum')
     
     # KLD term
     KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
@@ -55,8 +55,8 @@ def test(model, device, test_loader, kld_weight):
             if i == 0:
                 n = min(data.size(0), 8)
                 # Dynamic shape handling for visualization
-                # recon_batch is already (B, C, H, W)
-                comparison = torch.cat([data[:n], recon_batch[:n]])
+                # recon_batch is logits, so we apply sigmoid for visualization
+                comparison = torch.cat([data[:n], torch.sigmoid(recon_batch[:n])])
                 if not os.path.exists('results'):
                     os.makedirs('results')
                 save_image(comparison.cpu(),
