@@ -16,13 +16,13 @@ def main():
         os.makedirs('data')
     
     if config.DATASET == 'MNIST':
-        train_dataset = datasets.MNIST('./data', train=True, download=True,
+        train_dataset = datasets.MNIST('../data', train=True, download=True,
                                      transform=transforms.ToTensor())
-        test_dataset = datasets.MNIST('./data', train=False, transform=transforms.ToTensor())
+        test_dataset = datasets.MNIST('../data', train=False, transform=transforms.ToTensor())
     elif config.DATASET == 'CIFAR10':
-        train_dataset = datasets.CIFAR10('./data', train=True, download=True,
+        train_dataset = datasets.CIFAR10('../data', train=True, download=True,
                                        transform=transforms.ToTensor())
-        test_dataset = datasets.CIFAR10('./data', train=False, transform=transforms.ToTensor())
+        test_dataset = datasets.CIFAR10('../data', train=False, transform=transforms.ToTensor())
     else:
         raise ValueError('Invalid Dataset')
 
@@ -47,7 +47,7 @@ def main():
         
         with torch.no_grad():
             sample = torch.randn(64, config.LATENT_DIM).to(config.DEVICE)
-            sample = model.decode(sample).cpu()
+            sample = model.decoder(sample).cpu()
             if not os.path.exists('results'):
                 os.makedirs('results')
             save_image(sample,

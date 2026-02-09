@@ -3,7 +3,7 @@ import os
 
 # Hyperparameters
 BATCH_SIZE = 128
-EPOCHS = 30
+EPOCHS = 15
 LOG_INTERVAL = 100
 LR = 1e-3
 LATENT_DIM = 32  # Standard for high quality MNIST
